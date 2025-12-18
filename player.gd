@@ -241,7 +241,7 @@ func process_regeneration():
 		if regen_turns_left == 0:
 			regen_amount = 0
 
-func attack_nearest_zombie(damage: int, max_range: int = 1, min_range: int = 0, hit_chance: float = 1.0) -> bool:
+func attack_nearest_zombie(damage: int, max_range: int = 2, min_range: int = 0, hit_chance: float = 1.0) -> bool:
 	if not main_node:
 		return false
 
@@ -267,17 +267,17 @@ func attack_nearest_zombie(damage: int, max_range: int = 1, min_range: int = 0, 
 	return true
 
 func apply_backpack() -> bool:
-	if has_backpack:
-		print("Already have a backpack equipped.")
-		return false
+        if has_backpack:
+                print("Already have a backpack equipped.")
+                return false
 
-	has_backpack = true
-	max_hand_size = 7
-	remove_card_from_pools("Backpack")
-	var hud = get_hud()
-	if hud:
-		hud.set_max_hand_size(max_hand_size)
-		hud.enforce_hand_limit()
+        has_backpack = true
+        max_hand_size += 2
+        remove_card_from_pools("Backpack")
+        var hud = get_hud()
+        if hud:
+                hud.set_max_hand_size(max_hand_size)
+                hud.enforce_hand_limit()
 	return true
 
 func apply_flashlight():
