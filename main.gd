@@ -27,6 +27,8 @@ func _ready():
 	for i in range(3):
 		spawn_zombie()
 
+	player.start_turn()
+
 func setup_astar_grid():
 	var used_rect = tilemap.get_used_rect()
 	
@@ -121,6 +123,8 @@ func _on_player_turn_ended():
 		if randi_range(0,10) >= 8:
 			spawn_zombie()
 			print("Zombie: New Zombie Spawned")
+
+	player.start_turn()
 
 func get_random_walkable_tile() -> Vector2i:
 	var used_rect = tilemap.get_used_rect()
