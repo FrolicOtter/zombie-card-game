@@ -98,3 +98,7 @@ func has_card(card_name: String) -> bool:
 		if card.card_name == card_name:
 			return true
 	return false
+func update_ui(score, health):
+	$Label.text = "Health: "+ str(health) + " Score:" + str(score)
+	pass
+# update HUD elements

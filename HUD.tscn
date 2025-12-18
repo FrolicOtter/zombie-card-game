@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://ds6qlj5rvtlo"]
+[gd_scene load_steps=3 format=3 uid="uid://ds6qlj5rvtlo"]
 
 [ext_resource type="Script" uid="uid://yhkfgcpakdn5" path="res://hud.gd" id="1_efote"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k5de2"]
+bg_color = Color(0.004019165, 0.004019165, 0.004019165, 0.21960784)
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_efote")
@@ -16,3 +19,17 @@ offset_top = -40.0
 offset_right = 30.0
 grow_horizontal = 2
 grow_vertical = 0
+
+[node name="Label" type="Label" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -248.0
+offset_right = 312.0
+offset_bottom = 48.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxFlat_k5de2")
+text = "Health: 0 Score: 0"
+horizontal_alignment = 1
+autowrap_mode = 3

@@ -123,7 +123,9 @@ func _on_player_turn_ended():
 		if randi_range(0,10) >= 5:
 			spawn_zombie()
 			print("Zombie: New Zombie Spawned")
-
+	var health = player.health
+	var score = current_turn
+	$HUD.update_ui(score, health)
 	player.start_turn()
 
 func get_random_walkable_tile() -> Vector2i:
@@ -155,6 +157,3 @@ func is_tile_occupied(tile_pos: Vector2i) -> bool:
 			return true
 			
 	return false
-func update_ui():
-	pass
-# update HUD elements

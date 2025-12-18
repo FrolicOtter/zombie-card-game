@@ -102,7 +102,7 @@ func _on_pressed():
 							player.start_regeneration(2, 5)
 						"Backpack":
 							player.apply_backpack()
-							card_consumed = false
+							card_consumed = true
 						"Flashlight":
 							player.apply_flashlight()
 							card_consumed = false
