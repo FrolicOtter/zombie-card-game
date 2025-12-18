@@ -47,12 +47,17 @@ func take_turn():
 			position = main_node.tile_to_world(next_tile)
 
 func take_damage(amount: int):
-	health -= amount
-	print("Zombie took ", amount, " damage. HP: ", health)
-	if health <= 0:
-		die()
+        health -= amount
+        print("Zombie took ", amount, " damage. HP: ", health)
+        if health <= 0:
+                die()
 
 func die():
-	if main_node:
-		main_node.zombies.erase(self)
-	queue_free()
+        if main_node:
+                main_node.zombies.erase(self)
+        queue_free()
+
+func _input_event(_viewport, event, _shape_idx):
+        if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+                if main_node and main_node.player and main_node.player.has_method("on_zombie_clicked"):
+                        main_node.player.on_zombie_clicked(self)
