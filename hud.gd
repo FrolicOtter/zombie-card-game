@@ -61,37 +61,37 @@ func _on_card_removal(card_node):
 	enforce_hand_limit()
 
 func enforce_hand_limit():
-        var child_count = card_container.get_child_count()
+		var child_count = card_container.get_child_count()
 
-        if child_count > max_hand_size:
-                force_discard_mode = true
-                replacement_mode = true
-                pending_card = ""
-                highlight_cards_for_removal()
-                print("Hand over limit! Discard cards.")
-                return
+		if child_count > max_hand_size:
+				force_discard_mode = true
+				replacement_mode = true
+				pending_card = ""
+				highlight_cards_for_removal()
+				print("Hand over limit! Discard cards.")
+				return
 
-        if pending_card != "":
-                force_discard_mode = false
-                replacement_mode = true
-                highlight_cards_for_removal()
-                return
+		if pending_card != "":
+				force_discard_mode = false
+				replacement_mode = true
+				highlight_cards_for_removal()
+				return
 
-        force_discard_mode = false
-        replacement_mode = false
-        clear_removal_highlight()
+		force_discard_mode = false
+		replacement_mode = false
+		clear_removal_highlight()
 
 func set_max_hand_size(limit: int):
 	max_hand_size = limit
 	enforce_hand_limit()
 
 func is_blocking_actions() -> bool:
-                return force_discard_mode or replacement_mode or targeting_mode
+				return force_discard_mode or replacement_mode or targeting_mode
 
 func set_targeting_mode(enabled: bool):
-        targeting_mode = enabled
-        if not targeting_mode and not force_discard_mode and not replacement_mode:
-                clear_removal_highlight()
+		targeting_mode = enabled
+		if not targeting_mode and not force_discard_mode and not replacement_mode:
+				clear_removal_highlight()
 
 func has_card(card_name: String) -> bool:
 	for card in card_container.get_children():

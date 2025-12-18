@@ -83,14 +83,14 @@ func setup_camera_limits():
 	camera.limit_bottom = (used_rect.position.y + used_rect.size.y) * tile_size
 
 func start_turn():
-        awaiting_turn = false
-        moves_remaining = 1
-        _clear_targeting_state()
-        process_regeneration()
-        var hud = get_hud()
-        if hud:
-                hud.set_max_hand_size(max_hand_size)
-                hud.enforce_hand_limit()
+		awaiting_turn = false
+		moves_remaining = 1
+		_clear_targeting_state()
+		process_regeneration()
+		var hud = get_hud()
+		if hud:
+				hud.set_max_hand_size(max_hand_size)
+				hud.enforce_hand_limit()
 
 func _process(_delta):
 	if moving or awaiting_turn:
@@ -244,96 +244,96 @@ func process_regeneration():
 			regen_amount = 0
 
 func get_zombies_in_range(max_range: int, min_range: int) -> Array:
-        if not main_node:
-                return []
+		if not main_node:
+				return []
 
-        var zombies_in_range: Array = []
-        for zombie in main_node.zombies:
-                var distance = position.distance_to(zombie.position)
-                if distance <= max_range * tile_size and distance >= min_range * tile_size:
-                        zombies_in_range.append(zombie)
+		var zombies_in_range: Array = []
+		for zombie in main_node.zombies:
+				var distance = position.distance_to(zombie.position)
+				if distance <= max_range * tile_size and distance >= min_range * tile_size:
+						zombies_in_range.append(zombie)
 
-        return zombies_in_range
+		return zombies_in_range
 
 func request_targeted_attack(damage: int, max_range: int = 2, min_range: int = 0, hit_chance: float = 1.0, card_node = null) -> bool:
-        var zombies_in_range = get_zombies_in_range(max_range, min_range)
+		var zombies_in_range = get_zombies_in_range(max_range, min_range)
 
-        if zombies_in_range.is_empty():
-                print("No zombie in range!")
-                return false
+		if zombies_in_range.is_empty():
+				print("No zombie in range!")
+				return false
 
-        if zombies_in_range.size() == 1:
-                return _attempt_attack_on_zombie(zombies_in_range[0], damage, hit_chance, card_node)
+		if zombies_in_range.size() == 1:
+				return _attempt_attack_on_zombie(zombies_in_range[0], damage, hit_chance, card_node)
 
-        pending_attack = {
-                "damage": damage,
-                "max_range": max_range,
-                "min_range": min_range,
-                "hit_chance": hit_chance,
-                "card_node": card_node
-        }
+		pending_attack = {
+				"damage": damage,
+				"max_range": max_range,
+				"min_range": min_range,
+				"hit_chance": hit_chance,
+				"card_node": card_node
+		}
 
-        if card_node and card_node.has_method("set_targeting_state"):
-                card_node.set_targeting_state(true)
+		if card_node and card_node.has_method("set_targeting_state"):
+				card_node.set_targeting_state(true)
 
-        var hud = get_hud()
-        if hud and hud.has_method("set_targeting_mode"):
-                hud.set_targeting_mode(true)
+		var hud = get_hud()
+		if hud and hud.has_method("set_targeting_mode"):
+				hud.set_targeting_mode(true)
 
-        print("Multiple zombies in range. Click a zombie to attack.")
-        return false
+		print("Multiple zombies in range. Click a zombie to attack.")
+		return false
 
 func on_zombie_clicked(zombie):
-        if pending_attack.is_empty():
-                return
+		if pending_attack.is_empty():
+				return
 
-        if not main_node or not main_node.zombies.has(zombie):
-                _clear_targeting_state()
-                return
+		if not main_node or not main_node.zombies.has(zombie):
+				_clear_targeting_state()
+				return
 
-        var max_range = pending_attack.get("max_range", 2)
-        var min_range = pending_attack.get("min_range", 0)
-        var distance = position.distance_to(zombie.position)
-        if distance > max_range * tile_size or distance < min_range * tile_size:
-                        print("Selected zombie out of range.")
-                        return
+		var max_range = pending_attack.get("max_range", 2)
+		var min_range = pending_attack.get("min_range", 0)
+		var distance = position.distance_to(zombie.position)
+		if distance > max_range * tile_size or distance < min_range * tile_size:
+						print("Selected zombie out of range.")
+						return
 
-        _attempt_attack_on_zombie(
-                zombie,
-                pending_attack.get("damage", 0),
-                pending_attack.get("hit_chance", 1.0),
-                pending_attack.get("card_node", null)
-        )
+		_attempt_attack_on_zombie(
+				zombie,
+				pending_attack.get("damage", 0),
+				pending_attack.get("hit_chance", 1.0),
+				pending_attack.get("card_node", null)
+		)
 
-        _clear_targeting_state()
+		_clear_targeting_state()
 
 func _attempt_attack_on_zombie(zombie, damage: int, hit_chance: float, card_node) -> bool:
-        if randf() > hit_chance:
-                print("Attack missed!")
-        else:
-                zombie.take_damage(damage)
-                print("Hit zombie for ", damage, " damage!")
+		if randf() > hit_chance:
+				print("Attack missed!")
+		else:
+				zombie.take_damage(damage)
+				print("Hit zombie for ", damage, " damage!")
 
-        if not pending_attack.is_empty() and card_node:
-                print("Used ", card_node.card_name)
+		if not pending_attack.is_empty() and card_node:
+				print("Used ", card_node.card_name)
 
-        if card_node and card_node.has_method("consume_use"):
-                card_node.consume_use()
+		if card_node and card_node.has_method("consume_use"):
+				card_node.consume_use()
 
-        return true
+		return true
 
 func _clear_targeting_state():
-        if pending_attack.has("card_node") and is_instance_valid(pending_attack.card_node) and pending_attack.card_node.has_method("set_targeting_state"):
-                pending_attack.card_node.set_targeting_state(false)
+		if pending_attack.has("card_node") and is_instance_valid(pending_attack.card_node) and pending_attack.card_node.has_method("set_targeting_state"):
+				pending_attack.card_node.set_targeting_state(false)
 
-        var hud = get_hud()
-        if hud and hud.has_method("set_targeting_mode"):
-                hud.set_targeting_mode(false)
+		var hud = get_hud()
+		if hud and hud.has_method("set_targeting_mode"):
+				hud.set_targeting_mode(false)
 
-        pending_attack.clear()
+		pending_attack.clear()
 
 func attack_nearest_zombie(damage: int, max_range: int = 2, min_range: int = 0, hit_chance: float = 1.0) -> bool:
-        return request_targeted_attack(damage, max_range, min_range, hit_chance)
+		return request_targeted_attack(damage, max_range, min_range, hit_chance)
 
 func apply_backpack() -> bool:
 	if has_backpack:

@@ -119,7 +119,7 @@ func _on_player_turn_ended():
 	current_turn += 1
 	print("Turn: ", current_turn)
 	randf_range(1,10)
-	if current_turn%50 == 0:
+	if current_turn%10 == 0:
 		if randi_range(0,10) >= 8:
 			spawn_zombie()
 			print("Zombie: New Zombie Spawned")
