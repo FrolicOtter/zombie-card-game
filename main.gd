@@ -120,7 +120,7 @@ func _on_player_turn_ended():
 	print("Turn: ", current_turn)
 	randf_range(1,10)
 	if current_turn%10 == 0:
-		if randi_range(0,10) >= 8:
+		if randi_range(0,10) >= 5:
 			spawn_zombie()
 			print("Zombie: New Zombie Spawned")
 
@@ -155,3 +155,6 @@ func is_tile_occupied(tile_pos: Vector2i) -> bool:
 			return true
 			
 	return false
+func update_ui():
+	pass
+# update HUD elements

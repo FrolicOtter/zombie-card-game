@@ -2,6 +2,7 @@ extends Button
 
 signal card_used(card_node)
 signal card_selected_for_removal(card_node)
+signal turn_ended
 
 var card_name = ""
 var in_removal_mode = false
@@ -100,7 +101,8 @@ func _on_pressed():
 							player.heal(5)
 							player.start_regeneration(2, 5)
 						"Backpack":
-							card_consumed = player.apply_backpack()
+							player.apply_backpack()
+							card_consumed = false
 						"Flashlight":
 							player.apply_flashlight()
 							card_consumed = false
@@ -113,3 +115,4 @@ func _on_pressed():
 						print("Used ", card_name)
 						if not uses_managed_by_player:
 								consume_use()
+				player.turn_ended.emit()
