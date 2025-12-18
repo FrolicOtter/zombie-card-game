@@ -225,10 +225,10 @@ func heal(amount: int):
 	# Update HUD here if you have health displayx
 
 func has_flashlight_card() -> bool:
-var hud = get_hud()
-if hud:
-return hud.has_card("Flashlight")
-return has_flashlight
+	var hud = get_hud()
+	if hud:
+		return hud.has_card("Flashlight")
+	return has_flashlight
 
 func start_regeneration(amount: int, turns: int):
 	regen_amount = amount
@@ -292,10 +292,10 @@ func consume_energy_drink() -> bool:
 	return true
 
 func on_card_added(card_name: String):
-        if card_name == "Backpack":
-                remove_card_from_pools("Backpack")
-        if card_name == "Flashlight":
-                apply_flashlight()
+		if card_name == "Backpack":
+				remove_card_from_pools("Backpack")
+		if card_name == "Flashlight":
+				apply_flashlight()
 
 func remove_card_from_pools(card_name: String):
 	card_normal = card_normal.filter(func(c): return c != card_name)
