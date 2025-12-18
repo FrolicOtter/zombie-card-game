@@ -1,8 +1,9 @@
 extends Area2D
 
 # FIX: Use Vector2i for grid coordinates to avoid float errors
-var main_node: Node 
-var tile_size := 64 
+var main_node: Node
+var tile_size := 64
+var health := 30
 
 func _ready():
 	# Ensure alignment on spawn
@@ -12,18 +13,18 @@ func setup(_main_node):
 	main_node = _main_node
 
 func take_turn():
-	if not main_node: 
+	if not main_node:
 		return
 
 	var my_tile: Vector2i = main_node.world_to_tile(position)
 	var player_tile: Vector2i = main_node.world_to_tile(main_node.player.position)
-	
+
 	var path: Array[Vector2i] = main_node.get_pathfinding(my_tile, player_tile)
-	
+
 	if path.size() > 1:
 		var next_tile: Vector2i = path[1]
 		var tile_data = main_node.tilemap.get_cell_tile_data(next_tile)
-		
+
 		# 1. Check for Walls (Existing logic)
 		if tile_data and tile_data.get_custom_data("isWall"):
 			#print("Zombie bumps into wall at ", next_tile)
@@ -40,7 +41,18 @@ func take_turn():
 			else:
 				#print("Zombie blocked by another zombie at ", next_tile)
 				pass
-				
+
 		# 3. Path is clear, move there
 		else:
 			position = main_node.tile_to_world(next_tile)
+
+func take_damage(amount: int):
+	health -= amount
+	print("Zombie took ", amount, " damage. HP: ", health)
+	if health <= 0:
+		die()
+
+func die():
+	if main_node:
+		main_node.zombies.erase(self)
+	queue_free()
