@@ -74,11 +74,11 @@ func enforce_hand_limit():
 		clear_removal_highlight()
 
 func set_max_hand_size(limit: int):
-        max_hand_size = limit
-        enforce_hand_limit()
+	max_hand_size = limit
+	enforce_hand_limit()
 
 func is_blocking_actions() -> bool:
-        return force_discard_mode or replacement_mode
+		return force_discard_mode or replacement_mode
 
 func has_card(card_name: String) -> bool:
 	for card in card_container.get_children():
