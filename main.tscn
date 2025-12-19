@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=4 uid="uid://cixk8u667vbr3"]
+[gd_scene load_steps=8 format=4 uid="uid://cixk8u667vbr3"]
 
 [ext_resource type="Script" uid="uid://bm3svd5spiywi" path="res://main.gd" id="1_h2yge"]
 [ext_resource type="PackedScene" uid="uid://81wdihol0e5j" path="res://player.tscn" id="2_0xm2m"]
 [ext_resource type="PackedScene" uid="uid://ds6qlj5rvtlo" path="res://HUD.tscn" id="2_1bvp3"]
 [ext_resource type="Texture2D" uid="uid://6eacjata8wf5" path="res://ART/TileMap.png" id="2_h2yge"]
+[ext_resource type="PackedScene" uid="uid://s72cgffq2my2" path="res://main_menu.tscn" id="2_lquwl"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_h2yge"]
 texture = ExtResource("2_h2yge")
@@ -109,6 +110,8 @@ tile_proxies/coords_level = [[2, Vector2i(0, 0)], [4, Vector2i(0, 0)], [2, Vecto
 script = ExtResource("1_h2yge")
 tilemap = NodePath("TileMapLayer")
 
+[node name="MainMenu" parent="." instance=ExtResource("2_lquwl")]
+
 [node name="HUD" parent="." instance=ExtResource("2_1bvp3")]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
@@ -123,4 +126,7 @@ tilemap = NodePath("../TileMapLayer")
 [node name="Camera2D" type="Camera2D" parent="Player"]
 position = Vector2(-84, -63)
 
+[connection signal="start_game" from="MainMenu" to="." method="_on_main_menu_start_game"]
+[connection signal="game_over" from="Player" to="." method="_on_player_game_over"]
 [connection signal="turn_ended" from="Player" to="." method=" _on_player_turn_ended"]
+[connection signal="update_info_hud" from="Player" to="HUD" method="_on_player_update_info_hud"]

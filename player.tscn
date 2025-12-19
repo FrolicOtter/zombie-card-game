@@ -1,18 +1,106 @@
-[gd_scene load_steps=4 format=3 uid="uid://81wdihol0e5j"]
+[gd_scene load_steps=20 format=3 uid="uid://81wdihol0e5j"]
 
 [ext_resource type="Script" uid="uid://dn36t7mbmd1dl" path="res://player.gd" id="1_onrkg"]
-[ext_resource type="Texture2D" uid="uid://cvxboww8mefuf" path="res://ART/New Piskel-1.png.png" id="2_onrkg"]
+[ext_resource type="Texture2D" uid="uid://b4ijcsvdiu6g5" path="res://ART/CHARS/PLAYER/character_00.png" id="2_op7ga"]
+[ext_resource type="Texture2D" uid="uid://gxuju7hybx5t" path="res://ART/CHARS/PLAYER/character_01.png" id="3_q13i1"]
+[ext_resource type="Texture2D" uid="uid://qfh36ibr0ogk" path="res://ART/CHARS/PLAYER/character_02.png" id="4_pylmc"]
+[ext_resource type="Texture2D" uid="uid://dk0gkl7e37mmh" path="res://ART/CHARS/PLAYER/character_03.png" id="5_pbfsw"]
+[ext_resource type="Texture2D" uid="uid://k8nqd11pbn65" path="res://ART/CHARS/PLAYER/character_04.png" id="6_5tmop"]
+[ext_resource type="Texture2D" uid="uid://dhflwnp0pn1qm" path="res://ART/CHARS/PLAYER/character_05.png" id="7_7ahtn"]
+[ext_resource type="Texture2D" uid="uid://c1lnywfm3dql7" path="res://ART/CHARS/PLAYER/character_06.png" id="8_7lmhl"]
+[ext_resource type="Texture2D" uid="uid://t7y6hadbsh1g" path="res://ART/CHARS/PLAYER/character_07.png" id="9_dx0e4"]
+[ext_resource type="Texture2D" uid="uid://d174672lr3m0h" path="res://ART/CHARS/PLAYER/character_12.png" id="10_jm5j8"]
+[ext_resource type="Texture2D" uid="uid://y8uka8mgg3h1" path="res://ART/CHARS/PLAYER/character_13.png" id="11_7hik5"]
+[ext_resource type="Texture2D" uid="uid://dase1l2g70n3u" path="res://ART/CHARS/PLAYER/character_14.png" id="12_qtqh7"]
+[ext_resource type="Texture2D" uid="uid://dckh65xrtxwax" path="res://ART/CHARS/PLAYER/character_15.png" id="13_2wuci"]
+[ext_resource type="Texture2D" uid="uid://bdu2nmfvbbpqv" path="res://ART/CHARS/PLAYER/character_08.png" id="14_iruf7"]
+[ext_resource type="Texture2D" uid="uid://dgbgu080cg34o" path="res://ART/CHARS/PLAYER/character_09.png" id="15_j5n4i"]
+[ext_resource type="Texture2D" uid="uid://cmq83jxna2mot" path="res://ART/CHARS/PLAYER/character_10.png" id="16_634y6"]
+[ext_resource type="Texture2D" uid="uid://c766k2dxpak2t" path="res://ART/CHARS/PLAYER/character_11.png" id="17_efrwb"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_i3pqv"]
 size = Vector2(64, 64)
 
+[sub_resource type="SpriteFrames" id="SpriteFrames_hiqhm"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_op7ga")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_q13i1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_pylmc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_pbfsw")
+}],
+"loop": true,
+"name": &"Bender",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_5tmop")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_7ahtn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_7lmhl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_dx0e4")
+}],
+"loop": true,
+"name": &"Hello_Kitty",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("10_jm5j8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_7hik5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_qtqh7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_2wuci")
+}],
+"loop": true,
+"name": &"Spider",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("14_iruf7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_j5n4i")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_634y6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_efrwb")
+}],
+"loop": true,
+"name": &"Stitch",
+"speed": 5.0
+}]
+
 [node name="Player" type="CharacterBody2D"]
 position = Vector2(84, 63)
 script = ExtResource("1_onrkg")
+character = "Bender"
 metadata/_edit_group_ = true
-
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_onrkg")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_i3pqv")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_hiqhm")
+animation = &"Hello_Kitty"

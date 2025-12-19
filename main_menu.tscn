@@ -1,0 +1,111 @@
+[gd_scene load_steps=11 format=3 uid="uid://s72cgffq2my2"]
+
+[ext_resource type="Texture2D" uid="uid://gxuju7hybx5t" path="res://ART/CHARS/PLAYER/character_01.png" id="1_8qtwp"]
+[ext_resource type="Script" uid="uid://u8qvy3n5ouoi" path="res://main_menu.gd" id="1_dy7ct"]
+[ext_resource type="Texture2D" uid="uid://571gs8mcfvjl" path="res://ART/CHARS/PLAYER/sprite_04.png" id="2_dy7ct"]
+[ext_resource type="Texture2D" uid="uid://k8nqd11pbn65" path="res://ART/CHARS/PLAYER/character_04.png" id="3_0o4t1"]
+[ext_resource type="Texture2D" uid="uid://6ephq13epvs6" path="res://ART/CHARS/PLAYER/sprite_09.png" id="4_0k4wn"]
+[ext_resource type="Texture2D" uid="uid://dase1l2g70n3u" path="res://ART/CHARS/PLAYER/character_14.png" id="5_j5v2v"]
+[ext_resource type="Texture2D" uid="uid://bjvhh7p3aams6" path="res://ART/CHARS/PLAYER/sprite_19.png" id="6_iotk1"]
+[ext_resource type="Texture2D" uid="uid://dgbgu080cg34o" path="res://ART/CHARS/PLAYER/character_09.png" id="7_w44g7"]
+[ext_resource type="Texture2D" uid="uid://beaimehtjtdvp" path="res://ART/CHARS/PLAYER/sprite_14.png" id="8_cm266"]
+
+[sub_resource type="GDScript" id="GDScript_0o4t1"]
+script/source = "extends HBoxContainer
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	
+	
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	
+	pass
+func _clicked(Button):
+	
+	pass
+"
+
+[node name="MainMenu" type="CanvasLayer"]
+script = ExtResource("1_dy7ct")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0.0044353534, 0.0044967677, 0.69803923)
+
+[node name="Characters" type="HBoxContainer" parent="."]
+offset_left = 160.0
+offset_top = 128.0
+offset_right = 428.0
+offset_bottom = 396.0
+script = SubResource("GDScript_0o4t1")
+
+[node name="Bender" type="TextureButton" parent="Characters"]
+layout_mode = 2
+toggle_mode = true
+texture_normal = ExtResource("1_8qtwp")
+texture_pressed = ExtResource("2_dy7ct")
+
+[node name="Hello_Kitty" type="TextureButton" parent="Characters"]
+layout_mode = 2
+toggle_mode = true
+texture_normal = ExtResource("3_0o4t1")
+texture_pressed = ExtResource("4_0k4wn")
+
+[node name="Stitch" type="TextureButton" parent="Characters"]
+layout_mode = 2
+toggle_mode = true
+texture_normal = ExtResource("7_w44g7")
+texture_pressed = ExtResource("8_cm266")
+
+[node name="Spider" type="TextureButton" parent="Characters"]
+layout_mode = 2
+toggle_mode = true
+texture_normal = ExtResource("5_j5v2v")
+texture_pressed = ExtResource("6_iotk1")
+
+[node name="Start Game" type="Button" parent="."]
+offset_left = 440.0
+offset_top = 112.0
+offset_right = 796.0
+offset_bottom = 208.0
+theme_override_font_sizes/font_size = 32
+text = "Start Game"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+offset_left = 320.0
+offset_top = 256.0
+offset_right = 896.0
+offset_bottom = 384.0
+theme_override_font_sizes/normal_font_size = 16
+theme_override_font_sizes/bold_font_size = 32
+theme_override_font_sizes/bold_italics_font_size = 32
+theme_override_font_sizes/italics_font_size = 32
+theme_override_font_sizes/mono_font_size = 32
+bbcode_enabled = true
+text = "[b]Grab Cards, Fight Zombies, Survive[/b]
+- Use Arrow Keys to move
+- Press S to search for cards
+- Click a Card to use it"
+
+[node name="Pick" type="Label" parent="."]
+offset_left = 184.0
+offset_top = 80.0
+offset_right = 434.0
+offset_bottom = 143.0
+theme_override_font_sizes/font_size = 32
+text = "Pick a Character"
+
+[connection signal="pressed" from="Characters/Bender" to="." method="_on_bender_pressed"]
+[connection signal="pressed" from="Characters/Hello_Kitty" to="." method="_on_hello_kitty_pressed"]
+[connection signal="pressed" from="Characters/Stitch" to="." method="_on_stitch_pressed"]
+[connection signal="pressed" from="Characters/Spider" to="." method="_on_spider_pressed"]
+[connection signal="pressed" from="Start Game" to="." method="_on_start_game_pressed"]

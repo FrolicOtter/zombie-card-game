@@ -1,8 +1,9 @@
 class_name Player
 extends CharacterBody2D
-
+@export var character: String
 signal turn_ended
-
+signal update_info_hud(info_text)
+signal game_over()
 var tile_size := 64
 var moving := false
 @export var tilemap: TileMapLayer
@@ -93,6 +94,7 @@ func start_turn():
 				hud.enforce_hand_limit()
 
 func _process(_delta):
+	
 	if moving or awaiting_turn:
 		return
 
@@ -104,12 +106,16 @@ func _process(_delta):
 	var action_taken = false
 	# Map inputs directly to Vector2i for cleaner grid math
 	if Input.is_action_just_pressed("ui_right"):
+		$AnimatedSprite2D.frame = 1
 		input_dir = Vector2i.RIGHT
 	elif Input.is_action_just_pressed("ui_left"):
+		$AnimatedSprite2D.frame = 3
 		input_dir = Vector2i.LEFT
 	elif Input.is_action_just_pressed("ui_down"):
+		$AnimatedSprite2D.frame = 0
 		input_dir = Vector2i.DOWN
 	elif Input.is_action_just_pressed("ui_up"):
+		$AnimatedSprite2D.frame = 2
 		input_dir = Vector2i.UP
 
 	if input_dir != Vector2i.ZERO:
@@ -126,6 +132,7 @@ func handle_action_spent():
 	moves_remaining -= 1
 	if moves_remaining <= 0:
 		awaiting_turn = true
+		update_info_hud.emit("")
 		turn_ended.emit()
 
 func attempt_search():
@@ -153,7 +160,7 @@ func attempt_search():
 				cards = card_normal
 		if cards.size() > 0:
 			var card = cards.pick_random()
-			print("Found Card: ", card, " on tile type ", type)
+			update_info_hud.emit("Found Card: " + card)
 
 			var hud = get_hud()
 			if hud:
@@ -193,8 +200,10 @@ func take_damage(amount: int, source_world_pos: Vector2):
 	print("Player Hit! Took ", amount, " damage. Health: ", health, "/", max_health)
 
 	if health <= 0:
-		print("GAME OVER - Player Died")
+		update_info_hud.emit("GAME OVER - Player Died")
 		# Handle Game Over Logic here (e.g. get_tree().reload_current_scene())
+		game_over.emit()
+		
 		return
 
 	# --- Knockback Logic ---
@@ -256,66 +265,76 @@ func get_zombies_in_range(max_range: int, min_range: int) -> Array:
 		return zombies_in_range
 
 func request_targeted_attack(damage: int, max_range: int = 2, min_range: int = 0, hit_chance: float = 1.0, card_node = null) -> bool:
-		var zombies_in_range = get_zombies_in_range(max_range, min_range)
+	var zombies_in_range = get_zombies_in_range(max_range, min_range)
 
-		if zombies_in_range.is_empty():
-				print("No zombie in range!")
-				return false
+	if zombies_in_range.is_empty():
+		update_info_hud.emit("No monster in range!")
+		# Cancel the card activation visually
+		if card_node and card_node.has_method("reset_visuals"):
+			card_node.reset_visuals()
+		return false # Card not consumed
 
-		if zombies_in_range.size() == 1:
-				return _attempt_attack_on_zombie(zombies_in_range[0], damage, hit_chance, card_node)
+	# Save attack details for when we click a zombie
+	pending_attack = {
+		"damage": damage,
+		"max_range": max_range,
+		"min_range": min_range,
+		"hit_chance": hit_chance,
+		"card_node": card_node
+	}
 
-		pending_attack = {
-				"damage": damage,
-				"max_range": max_range,
-				"min_range": min_range,
-				"hit_chance": hit_chance,
-				"card_node": card_node
-		}
+	# Lock the card UI so we can't click other stuff
+	if card_node and card_node.has_method("set_targeting_state"):
+		card_node.set_targeting_state(true)
 
-		if card_node and card_node.has_method("set_targeting_state"):
-				card_node.set_targeting_state(true)
+	var hud = get_hud()
+	if hud and hud.has_method("set_targeting_mode"):
+		hud.set_targeting_mode(true)
 
-		var hud = get_hud()
-		if hud and hud.has_method("set_targeting_mode"):
-				hud.set_targeting_mode(true)
-
-		print("Multiple zombies in range. Click a zombie to attack.")
-		return false
+	update_info_hud.emit("Select a monster to attack.")
+	
+	# Return FALSE to tell card.gd "Don't finish the turn yet, we are waiting for input"
+	return false 
 
 func on_zombie_clicked(zombie):
-		if pending_attack.is_empty():
-				return
+	if pending_attack.is_empty():
+		return
 
-		if not main_node or not main_node.zombies.has(zombie):
-				_clear_targeting_state()
-				return
-
-		var max_range = pending_attack.get("max_range", 2)
-		var min_range = pending_attack.get("min_range", 0)
-		var distance = position.distance_to(zombie.position)
-		if distance > max_range * tile_size or distance < min_range * tile_size:
-						print("Selected zombie out of range.")
-						return
-
-		_attempt_attack_on_zombie(
-				zombie,
-				pending_attack.get("damage", 0),
-				pending_attack.get("hit_chance", 1.0),
-				pending_attack.get("card_node", null)
-		)
-
+	if not main_node or not main_node.zombies.has(zombie):
 		_clear_targeting_state()
+		return
 
+	var max_range = pending_attack.get("max_range", 2)
+	var min_range = pending_attack.get("min_range", 0)
+	var distance = position.distance_to(zombie.position)
+	
+	if distance > max_range * tile_size or distance < min_range * tile_size:
+		update_info_hud.emit("Selected monster out of range.")
+		return
+
+	# Execute the attack
+	var success = _attempt_attack_on_zombie(
+		zombie,
+		pending_attack.get("damage", 0),
+		pending_attack.get("hit_chance", 1.0),
+		pending_attack.get("card_node", null)
+	)
+
+	_clear_targeting_state()
+	
+	# IMPORTANT: Turn ends HERE now, only after a successful attack
+	if success:
+		update_info_hud.emit("")
+		turn_ended.emit()
 func _attempt_attack_on_zombie(zombie, damage: int, hit_chance: float, card_node) -> bool:
 		if randf() > hit_chance:
-				print("Attack missed!")
+				update_info_hud.emit("Attack missed!")
 		else:
 				zombie.take_damage(damage)
-				print("Hit zombie for ", damage, " damage!")
+				update_info_hud.emit("Hit monster for " + str(damage) + " damage!")
 
 		if not pending_attack.is_empty() and card_node:
-				print("Used ", card_node.card_name)
+				update_info_hud.emit("Used " + card_node.card_name)
 
 		if card_node and card_node.has_method("consume_use"):
 				card_node.consume_use()
@@ -357,7 +376,7 @@ func apply_flashlight():
 
 func consume_energy_drink() -> bool:
 	moves_remaining += 1
-	print("Energy boost! Extra movement this turn: ", moves_remaining)
+	update_info_hud.emit("Energy boost! Extra movement this turn: " + str(moves_remaining))
 	return true
 
 func on_card_added(card_name: String):
@@ -377,3 +396,5 @@ func has_card_in_hand(card_name: String) -> bool:
 	if hud:
 		return hud.has_card(card_name)
 	return false
+func set_animation():
+	$AnimatedSprite2D.set_animation(character)

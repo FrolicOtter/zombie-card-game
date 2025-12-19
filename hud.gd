@@ -6,7 +6,8 @@ var pending_card: String = ""
 var replacement_mode = false
 var force_discard_mode = false
 var targeting_mode = false
-
+func _ready():
+	$Button.visible = false
 func add_card(card_name: String):
 	var player = get_tree().get_first_node_in_group("player")
 	if (card_name == "Backpack" or card_name == "Flashlight") and has_card(card_name):
@@ -32,6 +33,7 @@ func create_card(card_name: String):
 	card_ui.set_card(card_name)
 	card_ui.card_used.connect(_on_card_used)
 	card_ui.card_selected_for_removal.connect(_on_card_removal)
+	card_ui.card_selected_for_info.connect(_on_card_selected_for_info)
 
 func highlight_cards_for_removal():
 	for card in card_container.get_children():
@@ -47,8 +49,13 @@ func _on_card_used(card_node):
 
 func _on_card_removal(card_node):
 	if replacement_mode and pending_card != "":
+		# FIX: Manually remove the child FIRST so the count updates instantly
+		card_container.remove_child(card_node)
 		card_node.queue_free()
+		
+		# Now add the new card
 		create_card(pending_card)
+		
 		pending_card = ""
 		replacement_mode = false
 		force_discard_mode = false
@@ -56,8 +63,11 @@ func _on_card_removal(card_node):
 		print("Card replaced!")
 
 	else:
+		# Standard discard logic
+		card_container.remove_child(card_node)
 		card_node.queue_free()
 
+	# Now this will see the correct count (5) and won't trigger the error
 	enforce_hand_limit()
 
 func enforce_hand_limit():
@@ -99,6 +109,16 @@ func has_card(card_name: String) -> bool:
 			return true
 	return false
 func update_ui(score, health):
-	$Label.text = "Health: "+ str(health) + " Score:" + str(score)
+	$Stats.text = "Health: "+ str(health) + " Score: " + str(score)
 	pass
+func _on_card_selected_for_info(info_text: Variant) -> void:
+	$CardInfo.text = info_text
 # update HUD elements
+
+
+func _on_player_update_info_hud(info_text: Variant) -> void:
+	$Info.text = info_text
+
+
+func _on_button_pressed() -> void:
+	get_tree().reload_current_scene()

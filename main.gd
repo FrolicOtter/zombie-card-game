@@ -9,7 +9,7 @@ var tile_size := 64
 
 var zombies := []
 var current_turn := 1
-
+var score: int = 0
 func _ready():
 	# Ensure references are set
 	tilemap = $TileMapLayer
@@ -23,11 +23,7 @@ func _ready():
 	setup_astar_grid()
 	
 	player.turn_ended.connect(_on_player_turn_ended)
-	
-	for i in range(3):
-		spawn_zombie()
-
-	player.start_turn()
+	$MainMenu.visible = true
 
 func setup_astar_grid():
 	var used_rect = tilemap.get_used_rect()
@@ -124,8 +120,7 @@ func _on_player_turn_ended():
 			spawn_zombie()
 			print("Zombie: New Zombie Spawned")
 	var health = player.health
-	var score = current_turn
-	$HUD.update_ui(score, health)
+	add_score(1)
 	player.start_turn()
 
 func get_random_walkable_tile() -> Vector2i:
@@ -157,3 +152,29 @@ func is_tile_occupied(tile_pos: Vector2i) -> bool:
 			return true
 			
 	return false
+
+
+func _on_main_menu_start_game(character: Variant) -> void:
+	print("Game Starting with character: ", character)
+	
+	# Set the character on the player so the correct sprite/stats load
+	print(character)
+	player.character = character 
+	player.set_animation()
+	# Spawn initial zombies (Moved here from _ready)
+	for i in range(3):
+		spawn_zombie()
+	$MainMenu.visible = false
+	# NOW we allow the player to move
+	player.start_turn()
+
+
+func _on_player_game_over() -> void:
+	$HUD/CardInfo.text = "[b] Game Over\nFinal Score: " + str(score) + "[/b]"
+	$HUD/Button.visible = true
+func add_score(amount: int):
+	score += amount
+	print("Score added: ", amount, " Total: ", score)
+	# Update HUD immediately so the player sees the number go up
+	if player:
+		$HUD.update_ui(score, player.health)

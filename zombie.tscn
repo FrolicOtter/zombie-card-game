@@ -1,16 +1,39 @@
-[gd_scene load_steps=4 format=3 uid="uid://dmhe8fokldsbv"]
+[gd_scene load_steps=8 format=3 uid="uid://dmhe8fokldsbv"]
 
 [ext_resource type="Script" uid="uid://ckoyfwm5c6uw5" path="res://zombie.gd" id="1_roy8y"]
-[ext_resource type="Texture2D" uid="uid://bmelha87ju6me" path="res://ART/New Piskel.png" id="2_roy8y"]
+[ext_resource type="Texture2D" uid="uid://pvgisbsu2kr0" path="res://ART/CHARS/monster_0.png" id="2_7nqyo"]
+[ext_resource type="Texture2D" uid="uid://cxsijfw7qahfi" path="res://ART/CHARS/monster_1.png" id="3_lnshm"]
+[ext_resource type="Texture2D" uid="uid://c3k3ox2xqkl1j" path="res://ART/CHARS/monster_2.png" id="4_x5rsa"]
+[ext_resource type="Texture2D" uid="uid://b3txnt8ly4n2v" path="res://ART/CHARS/monster_3.png" id="5_ogcpr"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_uiaus"]
 size = Vector2(64, 64)
 
+[sub_resource type="SpriteFrames" id="SpriteFrames_i82o5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_ogcpr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_x5rsa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_7nqyo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_lnshm")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
 [node name="Zombie" type="Area2D"]
 script = ExtResource("1_roy8y")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_roy8y")
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_uiaus")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_i82o5")

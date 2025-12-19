@@ -24,8 +24,21 @@ func take_turn():
 	if path.size() > 1:
 		var next_tile: Vector2i = path[1]
 		var tile_data = main_node.tilemap.get_cell_tile_data(next_tile)
-
-		# 1. Check for Walls (Existing logic)
+		var direction: Vector2i = next_tile - my_tile
+		var direction_int = 0
+		if direction == Vector2i(0, -1):
+			direction_int = 0  # up
+		elif direction == Vector2i(1, 0):
+			direction_int = 1  # right
+		elif direction == Vector2i(0, 1):
+			direction_int = 2  # down
+		elif direction == Vector2i(-1, 0):
+			direction_int = 3  # left
+		else:
+			direction_int = -1  # invalid/diagonal
+		if direction_int >=0:
+			$AnimatedSprite2D.frame = direction_int
+				# 1. Check for Walls (Existing logic)
 		if tile_data and tile_data.get_custom_data("isWall"):
 			#print("Zombie bumps into wall at ", next_tile)
 			pass
@@ -55,6 +68,7 @@ func take_damage(amount: int):
 func die():
 		if main_node:
 				main_node.zombies.erase(self)
+				main_node.add_score(5)
 		queue_free()
 
 func _input_event(_viewport, event, _shape_idx):
