@@ -54,7 +54,6 @@ var card_supermarket := [
 
 var card_construction := [
 	"Hammer","Hammer","Hammer",
-	"Barricade","Barricade",
 	"Fire Extinguisher","Fire Extinguisher",
 	"Baseball Bat",
 	"Bandaid",
