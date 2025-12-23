@@ -1,10 +1,14 @@
-[gd_scene load_steps=3 format=3 uid="uid://cvh0cwwarn6r5"]
+[gd_scene load_steps=5 format=3 uid="uid://cvh0cwwarn6r5"]
 
 [ext_resource type="Script" uid="uid://d0d03anrmcbnu" path="res://card.gd" id="1_dd2wi"]
 [ext_resource type="Texture2D" uid="uid://bab6byd3xny7t" path="res://ART/Cards/card_00.png" id="2_rjlel"]
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rjlel"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_q5obu"]
+
 [node name="Card" type="Control"]
-custom_minimum_size = Vector2(64, 64)
+custom_minimum_size = Vector2(85, 128)
 layout_mode = 3
 anchors_preset = 0
 offset_right = 48.0
@@ -12,18 +16,29 @@ offset_bottom = 31.0
 script = ExtResource("1_dd2wi")
 
 [node name="CardBase" type="TextureRect" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
 texture = ExtResource("2_rjlel")
+expand_mode = 1
 
-[node name="CardIcon" type="TextureRect" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="CardIcon" type="TextureRect" parent="CardBase"]
+layout_mode = 1
+expand_mode = 1
 
 [node name="OverlayButton" type="Button" parent="."]
 layout_mode = 0
 offset_right = 8.0
 offset_bottom = 8.0
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_rjlel")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_q5obu")
 flat = true
