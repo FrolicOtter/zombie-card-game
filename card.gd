@@ -1,4 +1,4 @@
-extends Button
+extends Control
 
 signal card_used(card_node)
 signal card_selected_for_removal(card_node)
@@ -94,8 +94,21 @@ const CARD_DATA = {
 		"desc": "Grants an extra move this turn."
 	}
 }
+var icons  = {
+	"Backpack": "res://ART/Cards/card_03.png",
+	"Bandaid": "res://ART/Cards/card_04.png",
+	"Baseball Bat": "res://ART/Cards/card_05.png",
+	"Canned Food": "res://ART/Cards/card_06.png",
+	"Energy Drink": "res://ART/Cards/card_07.png",
+	"Fire Extinguisher": "res://ART/Cards/card_08.png",
+	"Flashlight": "res://ART/Cards/card_09.png",
+	"Hammer": "res://ART/Cards/card_10.png",
+	"Medkit": "res://ART/Cards/card_11.png",
+	"Scalpel": "res://ART/Cards/card_12.png",
+}
 func _ready():
-	pressed.connect(_on_pressed)
+	$OverlayButton.pressed.connect(_on_pressed)
+	$OverlayButton.size = size
 	# Add to a group so we can easily deselect other cards
 	add_to_group("hand_cards")
 
@@ -103,12 +116,19 @@ func set_card(name: String):
 	card_name = name
 	uses_left = get_initial_uses(card_name)
 	_update_card_text()
+	$CardIcon.texture = load(icons[card_name])
+	
 
 func _update_card_text():
 	if uses_left > 1:
-		text = "%s (%d)" % [card_name, uses_left]
+		#TODO - Update Uses some how
+		#text = "%s (%d)" % [card_name, uses_left]
+		pass
 	else:
-		text = card_name
+		$CardIcon.texture = load(icons[card_name])
+		#TODO - Set image
+		#text = card_name
+		pass
 
 func get_initial_uses(name: String) -> int:
 	match name:
@@ -125,11 +145,11 @@ func set_removal_mode(enabled: bool):
 		modulate = Color(1, 0.5, 0.5) # Red tint
 	else:
 		reset_visuals()
-	disabled = targeting_lock
+	$OverlayButton.disabled = targeting_lock
 
 func set_targeting_state(enabled: bool):
 	targeting_lock = enabled
-	disabled = targeting_lock # Prevent clicking card while selecting a zombie
+	$OverlayButton.disabled = targeting_lock # Prevent clicking card while selecting a zombie
 
 func reset_visuals():
 	if is_primed:
