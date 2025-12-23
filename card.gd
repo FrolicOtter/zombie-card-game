@@ -106,9 +106,22 @@ var icons  = {
 	"Medkit": "res://ART/Cards/card_11.png",
 	"Scalpel": "res://ART/Cards/card_12.png",
 }
+var card_bases = {
+	"Default": "res://ART/Cards/card_00.png",
+	"Selected": "res://ART/Cards/card_02.png",
+	"Removal": "res://ART/Cards/card_01.png"
+}
 func _ready():
 	$OverlayButton.pressed.connect(_on_pressed)
 	$OverlayButton.size = size
+	$CardBase.size = size
+	$CardBase.pivot_offset = size/2
+	$CardBase/CardIcon.size = size
+	$CardBase/CardIcon.pivot_offset = size/2
+	$CardBase.scale = Vector2(.75,.75)
+	$CardBase/CardIcon.scale = Vector2(.75,.75)
+	
+	#$CardIcon.position = size
 	# Add to a group so we can easily deselect other cards
 	add_to_group("hand_cards")
 
@@ -116,7 +129,7 @@ func set_card(name: String):
 	card_name = name
 	uses_left = get_initial_uses(card_name)
 	_update_card_text()
-	$CardIcon.texture = load(icons[card_name])
+	$CardBase/CardIcon.texture = load(icons[card_name])
 	
 
 func _update_card_text():
@@ -125,7 +138,7 @@ func _update_card_text():
 		#text = "%s (%d)" % [card_name, uses_left]
 		pass
 	else:
-		$CardIcon.texture = load(icons[card_name])
+		$CardBase/CardIcon.texture = load(icons[card_name])
 		#TODO - Set image
 		#text = card_name
 		pass
@@ -142,7 +155,8 @@ func get_initial_uses(name: String) -> int:
 func set_removal_mode(enabled: bool):
 	in_removal_mode = enabled
 	if enabled:
-		modulate = Color(1, 0.5, 0.5) # Red tint
+		#modulate = Color(1, 0.5, 0.5) # Red tint
+		$CardBase.texture = load(card_bases["Removal"])
 	else:
 		reset_visuals()
 	$OverlayButton.disabled = targeting_lock
@@ -156,8 +170,11 @@ func reset_visuals():
 		pass
 		#card_selected_for_info.emit("")
 	is_primed = false
-	modulate = Color(1, 1, 1) # Reset color
-	
+	#modulate = Color(1, 1, 1) # Reset color
+	$CardBase.texture = load(card_bases["Default"])
+	$CardBase.scale = Vector2(.75,.75)
+	$CardBase/CardIcon.scale = Vector2(.75,.75)
+	#$CardBase.set_anchor()
 
 func consume_use():
 	uses_left -= 1
@@ -193,7 +210,10 @@ func _on_pressed():
 			card_selected_for_info.emit(info_text)
 		get_tree().call_group("hand_cards", "reset_visuals")
 		is_primed = true
-		modulate = Color(0, 1, 0) # Green
+		#modulate = Color(0, 1, 0) # Green
+		$CardBase.texture = load(card_bases["Selected"])
+		$CardBase.scale = Vector2(1,1)
+		$CardBase/CardIcon.scale = Vector2(.75,.75)
 		print("Selected ", card_name, ". Click again to use.")
 		return
 	card_selected_for_info.emit("")
