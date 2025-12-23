@@ -22,8 +22,6 @@ var moves_remaining := 1
 var pending_attack := {}
 
 # Duplicates = higher chance (weighted lists)
-# Backpack + Flashlight are extra rare everywhere
-# Weapons more common than heals;
 var card_normal := [
 	"Baseball Bat","Baseball Bat","Baseball Bat",
 	"Fire Extinguisher",
