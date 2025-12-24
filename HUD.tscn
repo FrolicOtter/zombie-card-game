@@ -19,7 +19,7 @@ bg_color = Color(0.1882353, 0.69803923, 0.32156864, 0.3764706)
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_efote")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="." groups=["Cards"]]
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0

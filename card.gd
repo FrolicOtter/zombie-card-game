@@ -186,6 +186,11 @@ func consume_use():
 
 func _on_pressed():
 	# 1. Removal/Discard Mode
+	var card_box = get_tree().get_nodes_in_group("Cards")[0]
+	for card in card_box.get_children():
+		print("Card Accessed")
+		if card.targeting_lock:
+			return
 	if in_removal_mode:
 		card_selected_for_removal.emit(self)
 		return
