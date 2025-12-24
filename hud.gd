@@ -52,10 +52,10 @@ func _on_card_removal(card_node):
 		# FIX: Manually remove the child FIRST so the count updates instantly
 		card_container.remove_child(card_node)
 		card_node.queue_free()
-		
+
 		# Now add the new card
 		create_card(pending_card)
-		
+
 		pending_card = ""
 		replacement_mode = false
 		force_discard_mode = false
@@ -96,7 +96,7 @@ func set_max_hand_size(limit: int):
 	enforce_hand_limit()
 
 func is_blocking_actions() -> bool:
-				return force_discard_mode or replacement_mode or targeting_mode
+	return force_discard_mode or replacement_mode or targeting_mode
 
 func set_targeting_mode(enabled: bool):
 		targeting_mode = enabled

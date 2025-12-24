@@ -165,6 +165,7 @@ func attempt_search():
 
 func get_hud():
 	if get_parent().has_node("HUD"):
+		print("HUD")
 		return get_parent().get_node("HUD")
 	return null
 
