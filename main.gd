@@ -166,12 +166,14 @@ func _on_main_menu_start_game(character: Variant) -> void:
 		spawn_zombie()
 	$MainMenu.visible = false
 	# NOW we allow the player to move
+	player.locked = false
 	player.start_turn()
 
 
 func _on_player_game_over() -> void:
 	$HUD/CardInfo.text = "[b] Game Over\nFinal Score: " + str(score) + "[/b]"
 	$HUD/Button.visible = true
+	player.locked = true
 func add_score(amount: int):
 	score += amount
 	print("Score added: ", amount, " Total: ", score)

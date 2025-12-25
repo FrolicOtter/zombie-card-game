@@ -20,7 +20,7 @@ var regen_amount := 0
 var awaiting_turn := false
 var moves_remaining := 1
 var pending_attack := {}
-
+var locked = true
 # Duplicates = higher chance (weighted lists)
 var card_normal := [
 	"Baseball Bat","Baseball Bat","Baseball Bat",
@@ -92,7 +92,7 @@ func start_turn():
 
 func _process(_delta):
 	
-	if moving or awaiting_turn:
+	if moving or awaiting_turn or locked:
 		return
 
 	var hud = get_hud()
@@ -165,7 +165,7 @@ func attempt_search():
 
 func get_hud():
 	if get_parent().has_node("HUD"):
-		print("HUD")
+		#print("HUD")
 		return get_parent().get_node("HUD")
 	return null
 
